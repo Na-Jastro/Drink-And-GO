@@ -13,6 +13,7 @@ namespace DrinkAndGo.Data.mocks
 
         public IEnumerable<Drink> Drinks
         {
+            //ToDo - Images
             get
             {
                 return new List<Drink>

@@ -19,7 +19,7 @@ namespace DrinkAndGo.Controllers
             _categoryRepository = categoryRepository;
         }
         public ViewResult List()
-        {
+         {
             ViewBag.Name = "DotNet, How?";
             var drinks = _drinkRepository.Drinks;
             DrinkListViewModel vm = new DrinkListViewModel();

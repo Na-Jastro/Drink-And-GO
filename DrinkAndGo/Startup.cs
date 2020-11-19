@@ -1,13 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using DrinkAndGo.Data;
 using DrinkAndGo.Data.Interfaces;
-using DrinkAndGo.Data.mocks;
+using DrinkAndGo.Data.Models;
+using DrinkAndGo.Data.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,14 +24,27 @@ namespace DrinkAndGo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<ICategoryRepository, MockCategoryRepository>();
-            services.AddTransient<IDrinkRepository, MockDrinkRepository>();
+            ////////////////////////////////
+            ///Added
+            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<IDrinkRepository, DrinkRepository>();
+
+            services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped(p => ShoppingCart.GetCart(p));
+            //////////////////////////////////////////////////////
             services.AddRazorPages();
+
+            //added
+            services.AddMemoryCache();
+            services.AddSession();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            DbInitializer.Seed(app);
             if (env.IsDevelopment())
             {
 
@@ -46,6 +57,7 @@ namespace DrinkAndGo
                 app.UseHsts();
             }
             //Added
+            app.UseSession();
             //app.UseStatusCodePages();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -53,13 +65,14 @@ namespace DrinkAndGo
             app.UseRouting();
 
             app.UseAuthorization();
-
-             app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
+            
+            app.UseEndpoints(endpoints =>
+           {
+               endpoints.MapControllerRoute(
+                   name: "default",
+                   pattern: "{controller=Home}/{action=Index}/{id?}");
+           });
+            
         }
     }
 }

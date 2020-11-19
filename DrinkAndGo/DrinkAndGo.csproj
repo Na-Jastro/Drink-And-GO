@@ -5,7 +5,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Shared\" />
+    <PackageReference Include="bootstrap" Version="3.3.7" />
+	  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.9" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.9" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.9">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.9" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.9" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.9">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+
   </ItemGroup>
 
 </Project>
