@@ -78,10 +78,12 @@ namespace DrinkAndGo.Data.Models
 
         public List<ShoppingCartItem> GetShoppingCartItems()
         {
-            return ShoppingCartItems ?? (ShoppingCartItems = _appDbContext.ShoppingCartItems.Where(p => p.ShopingCartId == ShoppingCartId)
-                .Include(p => p.ShopingCartId == ShoppingCartId).ToList());
+            return ShoppingCartItems ??
+                   (ShoppingCartItems =
+                       _appDbContext.ShoppingCartItems.Where(c => c.ShopingCartId == ShoppingCartId)
+                           .Include(s => s.Drink)
+                           .ToList());
         }
-
         public void ClearCart()
         {
             var cartItems = _appDbContext.ShoppingCartItems.Where(p => p.ShopingCartId == ShoppingCartId);

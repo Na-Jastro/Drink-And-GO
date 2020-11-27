@@ -5,6 +5,7 @@ using DrinkAndGo.Data.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,13 +33,15 @@ namespace DrinkAndGo
 
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped(p => ShoppingCart.GetCart(p));
+
+            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
             //////////////////////////////////////////////////////
             services.AddRazorPages();
 
             //added
             services.AddMemoryCache();
             services.AddSession();
-
+            //////////////////////////////////////////////////////
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,6 +61,9 @@ namespace DrinkAndGo
             }
             //Added
             app.UseSession();
+
+            //Todo -  app.UseIdentity();
+            app.UseAuthentication();
             //app.UseStatusCodePages();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
